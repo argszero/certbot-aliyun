@@ -1,19 +1,16 @@
 # certbot-aliyun: Automated Let's Encrypt certificate management for Alibaba Cloud
-# Multi-stage Docker build for optimized image size
+# Single-stage Docker build
 
-# Stage 1: Builder stage for Python dependencies
-FROM python:3.11-slim AS builder
+FROM python:3.11-slim
 
-# Install system dependencies for building Python packages
+# Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    gcc \
-    g++ \
-    libssl-dev \
-    libffi-dev \
-    curl \
+    certbot \
+    python3-certbot-dns-route53 \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Install uv.
+# Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # Create virtual environment
@@ -24,22 +21,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 COPY pyproject.toml uv.lock ./
 
 # Install Python dependencies using uv
-RUN uv pip install --no-cache-dir -e .
-
-# Stage 2: Runtime stage
-FROM python:3.11-slim
-
-# Install system dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    certbot \
-    python3-certbot-dns-route53 \
-    curl \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy virtual environment from builder
-COPY --from=builder /opt/venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
+RUN --mount=type=cache,mode=0777,target=/app/.uv-cache UV_HTTP_TIMEOUT=6000 uv sync --frozen --cache-dir=/app/.uv-cache
 
 # Create non-root user
 RUN useradd -m -u 1000 -s /bin/bash certbot && \
@@ -72,5 +54,5 @@ RUN mkdir -p /app/certs /app/certbot-config
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
     CMD /bin/bash -c "python -c 'import auto_cert' && command -v certbot >/dev/null 2>&1" || exit 1
 
-# Default command (show help)
-CMD ["help"]
+# Default command (run cron)
+CMD ["uv", "run", "python", "-m", "auto_cert.cron"]
