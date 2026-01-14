@@ -21,7 +21,7 @@ WORKDIR /app
 COPY pyproject.toml uv.lock ./
 
 # Install Python dependencies using uv
-RUN --mount=type=cache,mode=0777,target=/app/.uv-cache UV_HTTP_TIMEOUT=6000 uv sync --frozen --cache-dir=/app/.uv-cache
+RUN --mount=type=cache,mode=0777,target=/app/.uv-cache UV_HTTP_TIMEOUT=6000 uv sync --cache-dir=/app/.uv-cache
 
 # Create non-root user
 RUN useradd -m -u 1000 -s /bin/bash certbot && \
