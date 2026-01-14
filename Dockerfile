@@ -13,9 +13,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# Create virtual environment
-RUN uv venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
+
+# Set working directory
+WORKDIR /app
 
 # Copy dependency files
 COPY pyproject.toml uv.lock ./
@@ -27,9 +27,6 @@ RUN --mount=type=cache,mode=0777,target=/app/.uv-cache UV_HTTP_TIMEOUT=6000 uv s
 RUN useradd -m -u 1000 -s /bin/bash certbot && \
     mkdir -p /app /certs /certbot-config && \
     chown -R certbot:certbot /app /certs /certbot-config
-
-# Set working directory
-WORKDIR /app
 
 # Copy application code
 COPY --chown=certbot:certbot auto_cert ./auto_cert/
