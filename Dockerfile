@@ -13,9 +13,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install uv for Python package management
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
-    mv /root/.cargo/bin/uv /usr/local/bin/
+# Install uv.
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # Create virtual environment
 RUN uv venv /opt/venv
