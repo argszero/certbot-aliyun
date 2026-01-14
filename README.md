@@ -2,7 +2,8 @@
 
 **阿里云 Let's Encrypt 自动化证书工具**
 
-基于 Python 的 Let's Encrypt 证书自动化管理解决方案，支持通配符证书和阿里云 SLB/ALB 自动部署。
+再也不需要购买昂贵的收费证书！使用免费的 Let's Encrypt 证书，也可以实现省心免运维的证书管理。
+
 
 ## 🎯 只需 3 步完成证书管理
 
@@ -124,33 +125,6 @@ SLB_LISTENER_PROTOCOL=https
 
 - [快速开始指南](QUICKSTART.md) - 5 分钟快速入门
 
-## 🏗️ 项目结构
-
-```
-certbot-aliyun/
-├── auto_cert/                 # Python 核心代码
-│   ├── config.py             # 配置管理
-│   ├── apply_cert.py         # 证书申请
-│   ├── renew_cert.py         # 证书续订
-│   ├── update_slb_cert.py    # SLB/ALB 证书更新
-│   └── dns_alidns.py         # 阿里云 DNS 插件
-├── .env.example              # 环境变量配置模板
-├── .dockerignore            # Docker 构建忽略文件（可选）
-├── Dockerfile                # Docker 镜像定义（多阶段构建，可选）
-├── docker-entrypoint.sh      # Docker 容器入口点（可选）
-├── docker-compose.yml        # Docker Compose 开发配置（可选）
-├── .gitignore               # Git 忽略文件
-├── .gitattributes           # Git 文件属性配置
-├── pyproject.toml           # Python 项目配置
-├── uv.lock                  # Python 依赖锁文件
-├── README.md                # 项目说明文档
-└── QUICKSTART.md            # 快速开始指南
-
-# 注意：以下目录不应提交到版本控制
-# certs/                    # 证书存储目录（本地）
-# certbot-config/           # Certbot 配置目录（本地）
-# .env                      # 环境变量文件（包含敏感信息）
-```
 
 ## 🔄 开发指南
 
