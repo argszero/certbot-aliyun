@@ -5,11 +5,11 @@
 再也不需要购买昂贵的收费证书！使用免费的 Let's Encrypt 证书，也可以实现省心免运维的证书管理。
 
 
-## 🎯 只需 3 步完成证书管理
+## 🎯 主要命令
 
 ### 1️⃣ **申请证书**
 ```bash
-uv run python -m auto_cert.apply_cert
+uv run apply-cert
 ```
 - 支持通配符证书 `*.example.com`
 - 支持阿里云 DNS 自动验证
@@ -17,7 +17,7 @@ uv run python -m auto_cert.apply_cert
 
 ### 2️⃣ **续订证书**
 ```bash
-uv run python -m auto_cert.renew_cert
+uv run renew-cert
 ```
 - 自动检测证书到期时间
 - 支持定时任务自动续订
@@ -25,11 +25,19 @@ uv run python -m auto_cert.renew_cert
 
 ### 3️⃣ **更新证书到阿里云负载均衡**
 ```bash
-uv run python -m auto_cert.update_slb_cert
+uv run update-slb-cert
 ```
 - 自动更新 SLB/ALB 证书
 - 支持 HTTPS 监听器
 - 无缝切换新证书
+
+### ⏰ **定时任务**
+```bash
+uv run cron
+```
+- 自动运行证书续订任务
+- 可配置定时计划
+- 后台持续运行
 
 ## ✨ 功能特性
 
@@ -158,13 +166,16 @@ uv run pytest
 ### 运行开发命令
 ```bash
 # 申请证书（开发测试）
-uv run python -m auto_cert.apply_cert
+uv run apply-cert
 
 # 续订证书
-uv run python -m auto_cert.renew_cert
+uv run renew-cert
 
 # 更新 SLB 证书
-uv run python -m auto_cert.update_slb_cert
+uv run update-slb-cert
+
+# 运行定时任务
+uv run cron
 ```
 
 ## 📝 文件说明
