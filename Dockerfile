@@ -19,6 +19,8 @@ WORKDIR /app
 
 # Copy dependency files
 COPY pyproject.toml uv.lock ./
+COPY --chown=certbot:certbot auto_cert ./auto_cert/
+COPY --chown=certbot:certbot pyproject.toml ./
 
 # Install Python dependencies using uv
 RUN --mount=type=cache,mode=0777,target=/app/.uv-cache UV_HTTP_TIMEOUT=6000 uv sync --cache-dir=/app/.uv-cache
@@ -28,9 +30,6 @@ RUN useradd -m -u 1000 -s /bin/bash certbot && \
     mkdir -p /app /certs /certbot-config && \
     chown -R certbot:certbot /app /certs /certbot-config
 
-# Copy application code
-COPY --chown=certbot:certbot auto_cert ./auto_cert/
-COPY --chown=certbot:certbot pyproject.toml ./
 
 # Make hook script executable
 RUN chmod +x /app/auto_cert/alidns_hook.py
