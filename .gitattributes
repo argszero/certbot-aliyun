@@ -1,0 +1,39 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Shell scripts
+*.sh text eol=lf
+
+# Python files
+*.py text eol=lf
+*.pyc binary
+
+# Configuration files
+*.ini text eol=lf
+*.toml text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+
+# Certificate files (binary)
+*.pem binary
+*.key binary
+*.crt binary
+*.csr binary
+
+# Lock files
+uv.lock text eol=lf
+package-lock.json text eol=lf
+yarn.lock text eol=lf
+
+# Docker files
+Dockerfile text eol=lf
+.dockerignore text eol=lf
+
+# Git files
+.gitattributes text eol=lf
+.gitignore text eol=lf
+
+# Ensure shell scripts are executable
+*.sh linguist-language=Shell

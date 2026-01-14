@@ -1,0 +1,39 @@
+[project]
+name = "auto-cert"
+version = "0.1.0"
+description = "Automatic certificate management for Let's Encrypt and Alibaba Cloud SLB"
+authors = [
+    {name = "argszero", email = ""},
+]
+dependencies = [
+    "certbot>=2.0.0",
+    "acme>=2.0.0",
+    "cryptography>=42.0.0",
+    "aliyun-python-sdk-core>=2.13.0",
+    "aliyun-python-sdk-slb>=3.3.0",
+    "aliyun-python-sdk-alb>=1.0.0",
+    "python-dotenv>=1.0.0",
+    "requests>=2.31.0",
+    "schedule>=1.2.0",
+    "certbot-dns-route53>=5.2.2",
+    "aliyun-python-sdk-kms>=2.16.5",
+    "alibabacloud-kms20160120==2.4.0",
+    "alibabacloud-cas20200407>=3.0.5",
+    "alibabacloud-alidns20150109>=4.1.0",
+]
+
+[project.scripts]
+apply-cert = "auto_cert.apply_cert:main"
+renew-cert = "auto_cert.renew_cert:main"
+update-slb-cert = "auto_cert.update_slb_cert:main"
+cron = "auto_cert.cron:main"
+
+[project.entry-points."certbot.plugins"]
+dns-alidns = "auto_cert.dns_alidns:Authenticator"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project.optional-dependencies]
+dev = ["pytest", "black", "mypy"]

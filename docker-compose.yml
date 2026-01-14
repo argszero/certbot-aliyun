@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  certbot-aliyun:
+    build: .
+    image: certbot-aliyun:dev
+    container_name: certbot-aliyun-dev
+    restart: unless-stopped
+    environment:
+      # Required environment variables (override in .env or docker-compose.override.yml)
+      - ALIBABA_CLOUD_ACCESS_KEY_ID=${ALIBABA_CLOUD_ACCESS_KEY_ID:-test_key}
+      - ALIBABA_CLOUD_ACCESS_KEY_SECRET=${ALIBABA_CLOUD_ACCESS_KEY_SECRET:-test_secret}
+      - CERT_DOMAINS=${CERT_DOMAINS:-example.com,*.example.com}
+      - CERT_EMAIL=${CERT_EMAIL:-admin@example.com}
+
+      # Optional environment variables
+      - ALIBABA_CLOUD_REGION_ID=${ALIBABA_CLOUD_REGION_ID:-cn-hangzhou}
+      - CERT_STAGING=${CERT_STAGING:-true}
+      - CERT_VALIDATION_METHOD=${CERT_VALIDATION_METHOD:-manual}
+      - CRON_INTERVAL_HOURS=${CRON_INTERVAL_HOURS:-12}
+      - SLB_INSTANCE_ID=${SLB_INSTANCE_ID}
+      - SLB_LISTENER_ID=${SLB_LISTENER_ID}
+      - SLB_LISTENER_PROTOCOL=${SLB_LISTENER_PROTOCOL:-https}
+      - TZ=${TZ:-Asia/Shanghai}
+    volumes:
+      # Mount volumes for persistent storage
+      - ./certs:/app/certs
+      - ./certbot-config:/app/certbot-config
+      # Mount source code for development
+      - ./auto_cert:/app/auto_cert
+      - ./pyproject.toml:/app/pyproject.toml
+    command: help  # Default command shows help
