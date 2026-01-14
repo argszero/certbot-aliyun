@@ -4,6 +4,32 @@
 
 基于 Python 的 Let's Encrypt 证书自动化管理解决方案，支持通配符证书和阿里云 SLB/ALB 自动部署。
 
+## 🎯 只需 3 步完成证书管理
+
+### 1️⃣ **申请证书**
+```bash
+uv run python -m auto_cert.apply_cert
+```
+- 支持通配符证书 `*.example.com`
+- 支持阿里云 DNS 自动验证
+- 支持手动 DNS 验证
+
+### 2️⃣ **续订证书**
+```bash
+uv run python -m auto_cert.renew_cert
+```
+- 自动检测证书到期时间
+- 支持定时任务自动续订
+- 保留原有证书配置
+
+### 3️⃣ **更新证书到阿里云负载均衡**
+```bash
+uv run python -m auto_cert.update_slb_cert
+```
+- 自动更新 SLB/ALB 证书
+- 支持 HTTPS 监听器
+- 无缝切换新证书
+
 ## ✨ 功能特性
 
 - **🚀 自动化证书管理**: 完整的 Let's Encrypt 证书生命周期管理
@@ -15,29 +41,12 @@
 
 ## 📦 快速开始
 
-### 1. 安装依赖
-
-首先安装必要的工具：
+### 1. 环境准备
 
 ```bash
 # 安装 uv (Python 包管理器)
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# 安装 certbot (Let's Encrypt 客户端)
-# Ubuntu/Debian
-sudo apt-get update
-sudo apt-get install certbot
-
-# CentOS/RHEL
-sudo yum install certbot
-
-# macOS (使用 Homebrew)
-brew install certbot
-```
-
-### 2. 克隆项目并安装 Python 依赖
-
-```bash
 # 克隆项目
 git clone https://github.com/argszero/certbot-aliyun.git
 cd certbot-aliyun
@@ -46,20 +55,17 @@ cd certbot-aliyun
 uv venv
 source .venv/bin/activate  # Linux/macOS
 # Windows: .venv\Scripts\activate
-
-# 安装项目依赖
 uv pip install -e .
 ```
 
-### 3. 配置环境变量
-
-基于 `.env.example` 创建 `.env` 文件：
+### 2. 配置环境
 
 ```bash
+# 复制环境变量模板
 cp .env.example .env
 ```
 
-编辑 `.env` 文件，配置你的阿里云凭证和证书信息：
+编辑 `.env` 文件，配置阿里云凭证和证书信息：
 
 ```bash
 # 阿里云凭证
@@ -72,27 +78,16 @@ CERT_DOMAINS=example.com,*.example.com
 CERT_EMAIL=admin@example.com
 CERT_STAGING=false  # 测试时设为 true，生产环境设为 false
 CERT_VALIDATION_METHOD=alidns  # manual, dns-route53, alidns, standalone
+
+# SLB/ALB 配置（可选）
+SLB_INSTANCE_ID=alb-xxxxxx
+SLB_LISTENER_ID=lsr-yyyyyy
+SLB_LISTENER_PROTOCOL=https
 ```
 
-### 4. 申请证书
+### 3. 开始使用
 
-```bash
-# 使用阿里云 DNS 自动验证（推荐）
-uv run python -m auto_cert.apply_cert
-
-# 或者使用手动 DNS 验证
-CERT_VALIDATION_METHOD=manual uv run python -m auto_cert.apply_cert
-```
-
-### 5. 续订证书
-
-```bash
-# 手动续订证书
-uv run python -m auto_cert.renew_cert
-
-# 或者配置定时任务自动续订
-uv run python -m auto_cert.cron
-```
+现在你可以按照上面的 **3 步流程** 来管理证书了！
 
 ## 🔧 配置说明
 
